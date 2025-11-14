@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Christian Renz Ledesma</title>
+    <link rel="shortcut icon" href="{{url_for('static', filename='profile.png')}}" type="image/x-icon">
+    <link rel="stylesheet" href="{{url_for('static',  filename='style.css')}}?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">{{ name }}</div>
+
+        <div class="burger" onclick="toggleSidebar()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <nav class="desktop-nav">
+            <ul>
+                <li><a href="#home" class="active">🏠 Home</a></li>
+                <li><a href="{{url_for('about')}}">👨‍💻 About</a></li>
+                <li><a href="{{url_for('skills')}}">💼 Skills</a></li>
+                <li><a href="{{url_for('projects')}}">📂 Projects</a></li>
+                <li><a href="{{url_for('contact')}}">✉️ Contact</a></li>
+
+                <label class="switch mode-toggle">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+                <span class="mode-label" style="margin-left: -20px;">Light Mode</span>
+
+
+
+            </ul>
+        </nav>
+    </header>
+
+    <nav class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="#home" class="active" onclick="closeSidebar()">🏠 Home</a></li>
+            <li><a href="{{url_for('about')}}" onclick="closeSidebar()">👨‍💻 About</a></li>
+            <li><a href="{{url_for('skills')}}" onclick="closeSidebar()">💼 Skills</a></li>
+            <li><a href="{{url_for('projects')}}" onclick="closeSidebar()">📂 Projects</a></li>
+            <li><a href="{{url_for('contact')}}" onclick="closeSidebar()">✉️ Contact</a></li>
+            <li class="sidebar-toggle">
+                <label class="switch mode-toggle">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+                <span class="mode-label">Light Mode</span>
+            </li>
+
+
+        </ul>
+    </nav>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <section class="home" id="home">
+        <div id="particles-js"></div>
+
+        <div class="home-content">
+            <h1 class="theme-text2">
+                Hello, I'm <span class="name-text">{{ name }}</span>
+            </h1>
+            <div class="typing" id="typing-text">
+                <p class="theme-text">
+                    BS Information Technology Student 💻<br>
+                    I am currently studying at NEUST – Papaya Off-Campus. 🏫
+                </p>
+                <div class="button">
+                    <a href="{{url_for('about')}}"><button>About</button></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="home-image">
+            <div class="profile-ring">
+                <div class="ring"></div>
+                <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Picture">
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-content">
+        <div class="footer-container">
+            <div class="footer-left">
+                <p>© 2025 Christian Renz Ledesma. All rights reserved.</p>
+            </div>
+
+            <div class="footer-center">
+                <a href="mailto:christianrenzledesma210@gmail.com" target="_blank"><i
+                        class="fa-solid fa-envelope"></i></a>
+                <a href="{{url_for('show_terms')}}"><i class="fa-solid fa-clipboard-list"></i></a>
+                <a href="{{url_for('sitemap')}}"><i class="fa-solid fa-sitemap"></i></a>
+            </div>
+
+            <div class="footer-right">
+                <a href="https://www.facebook.com/renz.ledesma.339849/" target="_blank"><i
+                        class="fab fa-facebook-f"></i></a>
+                <a href="https://github.com/ChristianRenzLedesma" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/christian-renz-ledesma-42376938a/" target="_blank"><i
+                        class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- Sidebar JS -->
+    <script>
+        const body = document.body;
+        const toggles = document.querySelectorAll('.mode-toggle input');
+        const labels = document.querySelectorAll('.mode-label');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        function updateLabels() {
+            labels.forEach(label => {
+                label.textContent = body.classList.contains('dark-mode') ? 'Dark Mode' : 'Light Mode';
+            });
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            toggles.forEach(t => t.checked = true);
+        }
+        updateLabels();
+
+        toggles.forEach(t => {
+            t.addEventListener('change', () => {
+                if (t.checked) {
+                    body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.classList.remove('dark-mode');
+                    localStorage.setItem('theme', 'light');
+                }
+                updateLabels();
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <script>
+        let particlesInitialized = false;
+
+        function initParticles() {
+            const particleColor = document.body.classList.contains('dark-mode') ? "#00ffff" : "#003366";
+
+
+            if (particlesInitialized) {
+                if (window.pJSDom && window.pJSDom.length > 0) {
+                    window.pJSDom[0].pJS.fn.vendors.destroypJS();
+                    window.pJSDom = [];
+                }
+            }
+
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": 90 },
+                    "color": { "value": particleColor },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.4 },
+                    "size": { "value": 3 },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": particleColor,
+                        "opacity": 0.3,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 3,
+                        "direction": "none",
+                        "out_mode": "out"
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": { "enable": true, "mode": "grab" },
+                        "onclick": { "enable": true, "mode": "push" }
+                    },
+                    "modes": {
+                        "grab": { "distance": 200, "line_linked": { "opacity": 1 } }
+                    }
+                },
+                "retina_detect": true
+            });
+
+            particlesInitialized = true;
+        }
+
+        // Initialize particles on page load
+        initParticles();
+
+        // Update particles when theme toggled
+        const toggle = document.querySelectorAll('.mode-toggle input');
+        toggles.forEach(t => {
+            t.addEventListener('change', () => {
+                initParticles(); // re-init para mag-change color
+            });
+        });
+    </script>
+
+    <script>
+        window.addEventListener("load", () => {
+            document.body.classList.add("loaded");
+        });
+    </script>
+</body>
+
+</html>
